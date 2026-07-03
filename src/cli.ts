@@ -4,6 +4,7 @@ import { Command } from "commander";
 import { init } from "./commands/init.js";
 import { smelt } from "./commands/smelt.js";
 import { makeScaffoldCommand } from "./commands/scaffold.js";
+import { implement } from "./commands/implement.js";
 import { verify } from "./commands/verify.js";
 import { bridge } from "./commands/bridge.js";
 import { scan } from "./commands/scan.js";
@@ -75,6 +76,11 @@ program
   .command("testcase <feature>")
   .description("Scaffold testcases.md (requires prd.md)")
   .action(makeScaffoldCommand({ file: SPEC_FILES.testcases, label: "testcase" }));
+
+program
+  .command("implement <feature>")
+  .description("Check the spec set is ready for coding, and report which grounding files exist (requires tasks.md)")
+  .action(implement);
 
 program
   .command("verify <feature>")

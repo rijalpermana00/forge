@@ -5,6 +5,8 @@ export interface CommandSpec {
   requiresPrd: boolean;
   /** True for commands that only inspect/report — the AI reads, never edits. */
   readOnly: boolean;
+  /** True for commands where the AI writes application code outside specs/ — needs Write, not just Edit. */
+  writesCode?: boolean;
   /**
    * Body instructions telling the AI what to draft after the CLI scaffold runs.
    * Use {{prd}}, {{brief}}, {{schema}}, {{contract}}, {{tasks}}, {{testcases}}
@@ -143,6 +145,26 @@ export const COMMAND_SPECS: CommandSpec[] = [
       "| ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |\n\n" +
       "Test Type must be exactly **Positive** or **Negative** (bolded). Actual Result " +
       "and Status stay as `-` until QA runs them manually.",
+  },
+  {
+    name: "implement",
+    argumentHint: "[feature-name]",
+    description: "Work through tasks.md and write the actual code for the feature",
+    requiresPrd: true,
+    readOnly: false,
+    writesCode: true,
+    instructions:
+      GROUND_IN_RULES +
+      "This command doesn't scaffold a spec file — it checks that {{tasks}} exists " +
+      "and reports which grounding files (prd, schema, contract, tasks, testcases, " +
+      "mockup, RULES.md) are present. Read all of them, then implement the feature: " +
+      "follow {{tasks}}'s sequencing literally (data/schema before logic before UI, " +
+      "don't reorder around a missing dependency — flag it instead), match {{schema}} " +
+      "for the data layer and {{contract}} exactly for endpoint shapes, use {{mockup}} " +
+      "only as a layout/flow reference (not final markup), and don't invent scope, " +
+      "fields, or endpoints that aren't traceable to {{prd}}. Once implemented, run " +
+      "through {{testcases}} manually and report which rows pass so the user can fill " +
+      "in Actual Result / Status.",
   },
   {
     name: "verify",

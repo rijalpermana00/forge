@@ -65,6 +65,11 @@
 - Audit/base fields every entity carries: [TODO — e.g. created_by, created_date, ...]
 - Multi-tenancy / scoping: [TODO — or "n/a"]
 - Type conventions: [TODO]
+- Enums: don't use DBML's `enum {}` type. Model fixed-value fields as
+  `varchar`/`text` with a `note:` documenting the allowed values, or as a
+  proper lookup/reference table if the values carry their own metadata
+  (label, order, active flag) or are managed at runtime. This avoids a
+  schema migration every time a value is added or removed.
 
 ## Validation
 

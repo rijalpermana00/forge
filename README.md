@@ -27,7 +27,8 @@ workflow into whichever AI coding tool you use.
   `prd.md`.
 - **Sequencing is enforced by guard rails, not convention.** `schema`,
   `contract`, `tasks`, and `testcase` all refuse to run until `prd.md`
-  exists, so nothing gets invented without a spec behind it.
+  exists, and `implement` refuses until `tasks.md` exists, so nothing gets
+  invented — or coded — without a spec behind it.
 - **One instruction source, many renderers.** Every AI-tool bridge is
   generated from `src/lib/command-specs.ts` — the instructions are written
   once and rendered into each tool's native format, so they can't drift out
@@ -74,6 +75,9 @@ forge mockup btn-fraud-check      # mockup.html (requires prd.md)
 forge tasks btn-fraud-check       # tasks.md (requires prd.md)
 forge testcase btn-fraud-check    # testcases.md (requires prd.md)
 forge verify btn-fraud-check      # reports missing files / unresolved [TODO]s
+
+forge implement btn-fraud-check   # checks tasks.md exists, reports grounding files
+                                   # -> your AI tool then writes the actual code
 ```
 
 ## Spec index
@@ -136,6 +140,7 @@ the writing.
 | `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) | Yes |
 | `forge tasks <feature>` | `prd.md` | `tasks.md` (stub) | Yes |
 | `forge testcase <feature>` | `prd.md` | `testcases.md` (stub) | Yes |
+| `forge implement <feature>` | `tasks.md` | Console report of which grounding files exist; no spec file written | N/A — writes application code, not specs |
 | `forge verify <feature>` | — | Console report, `INDEX.md` status → `active` if complete | N/A (read-only on spec files) |
 
 ## Output structure
@@ -175,5 +180,6 @@ the templates and the AI-drafting instructions will drift out of sync.
 |---|---|---|
 | `forge: command not found` | `bun link` wasn't run, or shell hasn't reloaded | Re-run `bun link` in the `forge` package directory, restart your shell |
 | `No prd.md found for "<feature>"` | Tried `schema`/`contract`/`tasks`/`testcase` before `smelt` | Run `forge smelt <feature>` first |
+| `No tasks.md found for "<feature>"` | Tried `implement` before `tasks` | Run `forge tasks <feature>` first |
 | `<file> already exists — skipping` | The output spec file is already there | Edit it directly, or delete it to regenerate from the template |
 | `/forge:*` or `/forge-*` commands don't appear in your AI tool | `forge init`/`forge bridge` wasn't run for that target, or the tool needs a restart | Run `forge bridge <target>`, then restart the AI tool's session |

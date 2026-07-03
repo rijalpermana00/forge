@@ -5,7 +5,9 @@ import { substitutePaths, writeCommandFiles, type Bridge } from "./shared.js";
 export function renderClaude(spec: CommandSpec): string {
   const allowedTools = spec.readOnly
     ? `Bash(forge ${spec.name}:*), Read`
-    : `Bash(forge ${spec.name}:*), Read, Edit`;
+    : spec.writesCode
+      ? `Bash(forge ${spec.name}:*), Read, Write, Edit`
+      : `Bash(forge ${spec.name}:*), Read, Edit`;
 
   const body = substitutePaths(spec.instructions, (file) => `specs/$ARGUMENTS/${file}`);
 

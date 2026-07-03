@@ -11,6 +11,7 @@ export const SPEC_FILES = {
   prd: "prd.md",
   schema: "schema.dbml",
   contract: "api-contract.md",
+  mockup: "mockup.html",
   tasks: "tasks.md",
   testcases: "testcases.md",
 } as const;

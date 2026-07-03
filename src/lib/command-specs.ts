@@ -101,6 +101,21 @@ export const COMMAND_SPECS: CommandSpec[] = [
       "Note: [only if needed]",
   },
   {
+    name: "mockup",
+    argumentHint: "[feature-name]",
+    description: "Scaffold mockup.html, then draft it from prd.md",
+    requiresPrd: true,
+    readOnly: false,
+    instructions:
+      GROUND_IN_RULES +
+      "Read {{prd}} and fill {{mockup}} — a throwaway wireframe (plain HTML/CSS, no " +
+      "framework, no build step) covering the screens/states implied by the PRD's user " +
+      "stories: primary view, secondary views or modals, and empty/loading/error states " +
+      "where the PRD calls for them. This is for reviewing flow and layout, not visual " +
+      "design or production markup — don't invent screens, fields, or copy that aren't " +
+      "traceable to the PRD.",
+  },
+  {
     name: "tasks",
     argumentHint: "[feature-name]",
     description: "Scaffold tasks.md, then draft it from prd.md",

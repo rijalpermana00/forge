@@ -70,6 +70,7 @@ forge smelt btn-fraud-check       # interactive Q&A -> brief.md + prd.md stub
 
 forge schema btn-fraud-check      # schema.dbml (requires prd.md)
 forge contract btn-fraud-check    # api-contract.md (requires prd.md)
+forge mockup btn-fraud-check      # mockup.html (requires prd.md)
 forge tasks btn-fraud-check       # tasks.md (requires prd.md)
 forge testcase btn-fraud-check    # testcases.md (requires prd.md)
 forge verify btn-fraud-check      # reports missing files / unresolved [TODO]s
@@ -132,6 +133,7 @@ the writing.
 | `forge smelt <feature>` | — | `brief.md`, `prd.md` (stub), `INDEX.md` entry (`draft`) | Yes — refuses if `brief.md` exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
 | `forge contract <feature>` | `prd.md` | `api-contract.md` (stub) | Yes |
+| `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) | Yes |
 | `forge tasks <feature>` | `prd.md` | `tasks.md` (stub) | Yes |
 | `forge testcase <feature>` | `prd.md` | `testcases.md` (stub) | Yes |
 | `forge verify <feature>` | — | Console report, `INDEX.md` status → `active` if complete | N/A (read-only on spec files) |
@@ -149,6 +151,7 @@ your-project/
 │       ├── prd.md              # goal, actors, user stories, business rules, out-of-scope
 │       ├── schema.dbml          # entities derived from prd.md
 │       ├── api-contract.md       # Title / endpoint / Request / Response / Note format
+│       ├── mockup.html            # throwaway wireframe (plain HTML/CSS, no framework)
 │       ├── tasks.md               # WBS, sequenced data -> logic -> UI
 │       └── testcases.md            # No/Scenario/Case/Type/Expected/Actual/Status/Remark table
 ├── .claude/commands/forge/         # if target = claude

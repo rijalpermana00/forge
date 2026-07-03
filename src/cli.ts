@@ -62,6 +62,11 @@ program
   .action(makeScaffoldCommand({ file: SPEC_FILES.contract, label: "contract" }));
 
 program
+  .command("mockup <feature>")
+  .description("Scaffold mockup.html (requires prd.md)")
+  .action(makeScaffoldCommand({ file: SPEC_FILES.mockup, label: "mockup" }));
+
+program
   .command("tasks <feature>")
   .description("Scaffold tasks.md WBS (requires prd.md)")
   .action(makeScaffoldCommand({ file: SPEC_FILES.tasks, label: "tasks" }));

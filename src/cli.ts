@@ -6,6 +6,7 @@ import { makeScaffoldCommand } from "./commands/scaffold.js";
 import { verify } from "./commands/verify.js";
 import { bridge } from "./commands/bridge.js";
 import { scan } from "./commands/scan.js";
+import { rules } from "./commands/rules.js";
 import { SPEC_FILES } from "./lib/spec-files.js";
 
 const program = new Command();
@@ -33,9 +34,18 @@ program
   .action((options) => scan({ depth: Number(options.depth) }));
 
 program
+  .command("rules")
+  .description("Scaffold specs/RULES.md — project conventions the AI follows when drafting")
+  .action(() => rules());
+
+program
   .command("smelt <feature>")
   .description("Extract raw requirements into a grounding brief and stub the PRD")
-  .action(smelt);
+  .option(
+    "-f, --from <file>",
+    "extract from an existing BRD/requirements document instead of interactive Q&A"
+  )
+  .action((feature, options) => smelt(feature, { from: options.from }));
 
 program
   .command("schema <feature>")

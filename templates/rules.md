@@ -27,6 +27,31 @@
 `dto/`, `entities/`, `*.controller.ts`, `*.service.ts`, `*.repository.ts`,
 `*.module.ts`. The AI should scaffold new work to match this.]
 
+## Code design principles
+
+- **SOLID:**
+  - Single Responsibility — each module, class, or function has one reason
+    to change; separate data-fetching, business logic, and presentation.
+  - Open/Closed — extend behavior through new code (props, composition,
+    new implementations of an interface), not by editing working, tested
+    code to bolt on a special case.
+  - Liskov Substitution — a derived/extended type must work anywhere its
+    base type is accepted, without the caller needing to know the
+    difference or handle extra edge cases.
+  - Interface Segregation — depend only on the fields/methods actually
+    used; don't pass a whole object through when one field is needed, and
+    don't force implementers to satisfy methods they don't need.
+  - Dependency Inversion — depend on abstractions (interfaces, hooks,
+    an injected client), not concrete implementations, so the
+    implementation can be swapped or mocked without touching the caller.
+- **KISS:** prefer the simplest design that satisfies the requirement.
+  No speculative abstraction, config options, or generalization for
+  needs that don't exist yet.
+- **DRY:** don't duplicate logic — extract it once a second real
+  duplicate appears, not preemptively on the first occurrence. Two
+  similar-looking blocks that change for different reasons are not
+  duplication; don't force them into one abstraction.
+
 ## API design
 
 - Versioning: [TODO — e.g. URI versioning `/v1/`, `/v2/`]

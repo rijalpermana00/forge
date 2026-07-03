@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createRequire } from "node:module";
 import { Command } from "commander";
 import { init } from "./commands/init.js";
 import { smelt } from "./commands/smelt.js";
@@ -9,12 +10,15 @@ import { scan } from "./commands/scan.js";
 import { rules } from "./commands/rules.js";
 import { SPEC_FILES } from "./lib/spec-files.js";
 
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json") as { version: string };
+
 const program = new Command();
 
 program
   .name("forge")
   .description("Spec-driven development CLI — scaffolds specs, schemas, API contracts, tasks, and test cases.")
-  .version("0.1.2");
+  .version(version);
 
 program
   .command("init")

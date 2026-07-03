@@ -1,5 +1,6 @@
+import { join } from "node:path";
 import type { CommandSpec } from "../command-specs.js";
-import { substitutePaths } from "./shared.js";
+import { substitutePaths, writeCommandFiles, type Bridge } from "./shared.js";
 
 export function renderCursor(spec: CommandSpec): string {
   // Cursor commands are plain markdown prompt templates — no frontmatter-driven
@@ -21,3 +22,12 @@ forge ${spec.name} <feature-name>
 ${body}
 `;
 }
+
+export const cursorBridge: Bridge = {
+  target: "cursor",
+  write(cwd, specs) {
+    const dir = join(cwd, ".cursor", "commands");
+    writeCommandFiles(dir, specs, (spec) => `forge-${spec.name}.md`, renderCursor);
+    return `Wrote ${dir}/ (${specs.length} commands, available as /forge-<name>)`;
+  },
+};

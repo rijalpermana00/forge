@@ -1,18 +1,18 @@
 import { join } from "node:path";
 import { featureDir, templatesDir } from "../lib/paths.js";
 import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/template.js";
+import { SPEC_FILES } from "../lib/spec-files.js";
 
 interface ScaffoldOptions {
-  templateFile: string; // e.g. "schema.dbml"
-  outputFile: string; // e.g. "schema.dbml"
-  label: string; // e.g. "schema"
+  file: string; // spec artifact name, used as both template and output, e.g. "schema.dbml"
+  label: string; // human word for messages, e.g. "schema"
 }
 
-export function makeScaffoldCommand({ templateFile, outputFile, label }: ScaffoldOptions) {
+export function makeScaffoldCommand({ file, label }: ScaffoldOptions) {
   return (feature: string) => {
     const dir = featureDir(feature);
-    const prdPath = join(dir, "prd.md");
-    const outPath = join(dir, outputFile);
+    const prdPath = join(dir, SPEC_FILES.prd);
+    const outPath = join(dir, file);
 
     if (!fileExists(prdPath)) {
       console.error(
@@ -28,7 +28,7 @@ export function makeScaffoldCommand({ templateFile, outputFile, label }: Scaffol
       return;
     }
 
-    const raw = readTemplate(join(templatesDir, templateFile));
+    const raw = readTemplate(join(templatesDir, file));
     const rendered = renderTemplate(raw, { feature });
     writeIfAbsent(outPath, rendered);
     console.log(`Wrote ${outPath} (stub)`);

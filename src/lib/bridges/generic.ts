@@ -1,5 +1,7 @@
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
 import type { CommandSpec } from "../command-specs.js";
-import { substitutePaths } from "./shared.js";
+import { substitutePaths, type Bridge } from "./shared.js";
 
 export function renderGeneric(specs: CommandSpec[]): string {
   const sections = specs
@@ -32,3 +34,12 @@ Replace <feature-name> below with the actual feature folder under \`specs/\`.
 ${sections}
 `;
 }
+
+export const genericBridge: Bridge = {
+  target: "generic",
+  write(cwd, specs) {
+    const path = join(cwd, "AGENTS.md");
+    writeFileSync(path, renderGeneric(specs), "utf-8");
+    return `Wrote ${path} — point any AI tool at this file for the forge workflow.`;
+  },
+};

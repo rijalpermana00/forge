@@ -3,8 +3,7 @@ import { join } from "node:path";
 import { featureDir } from "../lib/paths.js";
 import { fileExists } from "../lib/template.js";
 import { upsertIndexEntry, readIndex } from "../lib/index-manifest.js";
-
-const REQUIRED_FILES = ["brief.md", "prd.md", "schema.dbml", "api-contract.md", "tasks.md", "testcases.md"];
+import { SPEC_FILE_NAMES } from "../lib/spec-files.js";
 
 export function verify(feature: string): void {
   const cwd = process.cwd();
@@ -14,7 +13,7 @@ export function verify(feature: string): void {
   let missing = 0;
   let withTodo = 0;
 
-  for (const file of REQUIRED_FILES) {
+  for (const file of SPEC_FILE_NAMES) {
     const path = join(dir, file);
     if (!fileExists(path)) {
       console.log(`  [MISSING]  ${file}`);

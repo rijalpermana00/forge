@@ -1,10 +1,11 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { Command } from "commander";
 import { init } from "./commands/init.js";
 import { smelt } from "./commands/smelt.js";
 import { makeScaffoldCommand } from "./commands/scaffold.js";
 import { verify } from "./commands/verify.js";
 import { bridge } from "./commands/bridge.js";
+import { SPEC_FILES } from "./lib/spec-files.js";
 
 const program = new Command();
 
@@ -32,24 +33,22 @@ program
 program
   .command("schema <feature>")
   .description("Scaffold schema.dbml (requires prd.md)")
-  .action(makeScaffoldCommand({ templateFile: "schema.dbml", outputFile: "schema.dbml", label: "schema" }));
+  .action(makeScaffoldCommand({ file: SPEC_FILES.schema, label: "schema" }));
 
 program
   .command("contract <feature>")
   .description("Scaffold api-contract.md (requires prd.md)")
-  .action(
-    makeScaffoldCommand({ templateFile: "api-contract.md", outputFile: "api-contract.md", label: "contract" })
-  );
+  .action(makeScaffoldCommand({ file: SPEC_FILES.contract, label: "contract" }));
 
 program
   .command("tasks <feature>")
   .description("Scaffold tasks.md WBS (requires prd.md)")
-  .action(makeScaffoldCommand({ templateFile: "tasks.md", outputFile: "tasks.md", label: "tasks" }));
+  .action(makeScaffoldCommand({ file: SPEC_FILES.tasks, label: "tasks" }));
 
 program
   .command("testcase <feature>")
   .description("Scaffold testcases.md (requires prd.md)")
-  .action(makeScaffoldCommand({ templateFile: "testcases.md", outputFile: "testcases.md", label: "testcase" }));
+  .action(makeScaffoldCommand({ file: SPEC_FILES.testcases, label: "testcase" }));
 
 program
   .command("verify <feature>")

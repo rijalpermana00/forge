@@ -1,13 +1,32 @@
 {
-  "name": "forge",
+  "name": "spec-forge",
   "version": "0.1.0",
   "description": "Spec-driven development CLI: scaffolds specs, schemas, API contracts, task lists, and test cases; bridges into Claude Code as slash commands.",
   "type": "module",
-  "bin": {
-    "forge": "./src/cli.ts"
+  "license": "MIT",
+  "author": "Rijal Permana <rijalpermana00@gmail.com>",
+  "keywords": [
+    "cli",
+    "spec-driven",
+    "scaffold",
+    "prd",
+    "claude-code",
+    "dbml",
+    "api-contract"
+  ],
+  "engines": {
+    "node": ">=18"
   },
+  "bin": {
+    "forge": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
   "scripts": {
     "build": "bun build ./src/cli.ts --outdir ./dist --target node",
+    "prepublishOnly": "bun run build",
     "link": "bun link"
   },
   "dependencies": {
@@ -16,6 +35,7 @@
   },
   "devDependencies": {
     "@types/prompts": "^2.4.9",
+    "bun-types": "^1.3.14",
     "typescript": "^5.5.4"
   }
 }

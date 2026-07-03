@@ -3,12 +3,13 @@ import { join } from "node:path";
 import { featureDir, templatesDir } from "../lib/paths.js";
 import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/template.js";
 import { upsertIndexEntry, readIndex } from "../lib/index-manifest.js";
+import { SPEC_FILES } from "../lib/spec-files.js";
 
 export async function smelt(feature: string): Promise<void> {
   const cwd = process.cwd();
   const dir = featureDir(feature, cwd);
-  const briefPath = join(dir, "brief.md");
-  const prdPath = join(dir, "prd.md");
+  const briefPath = join(dir, SPEC_FILES.brief);
+  const prdPath = join(dir, SPEC_FILES.prd);
 
   if (fileExists(briefPath)) {
     console.log(`brief.md already exists for "${feature}": ${briefPath}`);
@@ -40,7 +41,7 @@ export async function smelt(feature: string): Promise<void> {
     return;
   }
 
-  const briefRaw = readTemplate(join(templatesDir, "brief.md"));
+  const briefRaw = readTemplate(join(templatesDir, SPEC_FILES.brief));
   const brief = renderTemplate(briefRaw, {
     feature,
     date: new Date().toISOString().slice(0, 10),
@@ -51,7 +52,7 @@ export async function smelt(feature: string): Promise<void> {
   });
   writeIfAbsent(briefPath, brief);
 
-  const prdRaw = readTemplate(join(templatesDir, "prd.md"));
+  const prdRaw = readTemplate(join(templatesDir, SPEC_FILES.prd));
   const prd = renderTemplate(prdRaw, { feature });
   const prdWritten = writeIfAbsent(prdPath, prd);
 

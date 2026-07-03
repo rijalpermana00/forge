@@ -62,6 +62,7 @@ forge --version
 ```bash
 cd your-project
 forge init                        # scaffolds specs/ + AI bridge (defaults to Claude Code)
+forge scan                        # (optional) inventory existing code -> specs/CODEBASE.md
 forge smelt btn-fraud-check       # interactive Q&A -> brief.md + prd.md stub
 
 # draft prd.md by hand, or with your AI tool, using brief.md as grounding
@@ -125,6 +126,7 @@ the writing.
 |---|---|---|---|
 | `forge init [--target <t>]` | — | `specs/`, `specs/INDEX.md`, AI bridge files | Yes — bridge files regenerate freely |
 | `forge bridge <target>` | — | AI bridge files for `<target>` | Yes — always regenerates |
+| `forge scan [--depth <n>]` | — | `specs/CODEBASE.md` (stack, file stats, existing schema/API files, directory tree) | Yes — refreshes on every run |
 | `forge smelt <feature>` | — | `brief.md`, `prd.md` (stub), `INDEX.md` entry (`draft`) | Yes — refuses if `brief.md` exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
 | `forge contract <feature>` | `prd.md` | `api-contract.md` (stub) | Yes |
@@ -138,6 +140,7 @@ the writing.
 your-project/
 ├── specs/
 │   ├── INDEX.md                    # creation order, status, dependencies across all features
+│   ├── CODEBASE.md                 # (optional) forge scan output: existing project inventory
 │   └── <feature-name>/
 │       ├── brief.md           # smelt Q&A capture
 │       ├── prd.md              # goal, actors, user stories, business rules, out-of-scope

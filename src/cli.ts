@@ -5,6 +5,7 @@ import { smelt } from "./commands/smelt.js";
 import { makeScaffoldCommand } from "./commands/scaffold.js";
 import { verify } from "./commands/verify.js";
 import { bridge } from "./commands/bridge.js";
+import { scan } from "./commands/scan.js";
 import { SPEC_FILES } from "./lib/spec-files.js";
 
 const program = new Command();
@@ -24,6 +25,12 @@ program
   .command("bridge <target>")
   .description("(Re)generate AI-tool bridge commands: claude, cursor, windsurf, or generic")
   .action((target) => bridge(target));
+
+program
+  .command("scan")
+  .description("Inventory the existing project structure into specs/CODEBASE.md")
+  .option("-d, --depth <n>", "directory-tree depth to include in the report", "2")
+  .action((options) => scan({ depth: Number(options.depth) }));
 
 program
   .command("smelt <feature>")

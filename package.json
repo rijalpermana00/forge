@@ -1,0 +1,21 @@
+{
+  "name": "forge",
+  "version": "0.1.0",
+  "description": "Spec-driven development CLI: scaffolds specs, schemas, API contracts, task lists, and test cases; bridges into Claude Code as slash commands.",
+  "type": "module",
+  "bin": {
+    "forge": "./src/cli.ts"
+  },
+  "scripts": {
+    "build": "bun build ./src/cli.ts --outdir ./dist --target node",
+    "link": "bun link"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.5.4"
+  }
+}

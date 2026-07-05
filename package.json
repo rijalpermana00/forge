@@ -1,6 +1,6 @@
 {
   "name": "@rijalpermana/spec-forge",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Spec-driven development CLI: scaffolds specs, schemas, API contracts, task lists, and test cases; bridges into Claude Code as slash commands.",
   "type": "module",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "node": ">=18"
   },
   "bin": {
-    "forge": "./dist/cli.js"
+    "forge": "dist/cli.js"
   },
   "files": [
     "dist",

@@ -4,10 +4,11 @@ import { claudeBridge } from "../lib/bridges/claude.js";
 import { cursorBridge } from "../lib/bridges/cursor.js";
 import { windsurfBridge } from "../lib/bridges/windsurf.js";
 import { genericBridge } from "../lib/bridges/generic.js";
+import { gptBridge } from "../lib/bridges/gpt.js";
 
 // Registry of every supported AI-tool bridge. Adding a target is a new module
 // plus one entry here — the dispatcher below never changes (Open/Closed).
-const BRIDGES: Bridge[] = [claudeBridge, cursorBridge, windsurfBridge, genericBridge];
+const BRIDGES: Bridge[] = [claudeBridge, cursorBridge, windsurfBridge, gptBridge, genericBridge];
 
 export type BridgeTarget = (typeof BRIDGES)[number]["target"];
 

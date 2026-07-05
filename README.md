@@ -108,6 +108,7 @@ other rows' `Status`, `Depends On`, or `Notes` are preserved across runs.
 ```bash
 forge init --target cursor
 forge bridge windsurf     # add a second bridge to the same project
+forge bridge gpt          # prompt files for GPT/ChatGPT
 forge bridge generic      # AGENTS.md fallback for any other tool
 ```
 
@@ -116,13 +117,16 @@ forge bridge generic      # AGENTS.md fallback for any other tool
 | `claude` | `.claude/commands/forge/*.md` | `/forge:smelt`, `/forge:schema`, ... |
 | `cursor` | `.cursor/commands/forge-*.md` | `/forge-smelt`, `/forge-schema`, ... |
 | `windsurf` | `.windsurf/workflows/forge-*.md` | `/forge-smelt`, `/forge-schema`, ... |
+| `gpt` | `.gpt/commands/forge-*.md` | Use as GPT/ChatGPT reference prompts |
 | `generic` | `AGENTS.md` (single file) | Point any AI tool at the file manually |
 
 Claude Code uses frontmatter-driven shell execution (`!` command injection,
 `$ARGUMENTS` substitution). Cursor and Windsurf commands are plain
 instructions — their agents already have their own terminal tools, so the
 bridge tells them which `forge` command to run rather than running it for
-them. All four targets point at the same `prd.md`-grounding rules, so
+them. GPT prompt files use the same plain-instruction model for ChatGPT or
+Custom GPT project context. All five targets point at the same
+`prd.md`-grounding rules, so
 drafting behavior stays consistent regardless of which tool actually does
 the writing.
 
@@ -162,6 +166,7 @@ your-project/
 ├── .claude/commands/forge/         # if target = claude
 ├── .cursor/commands/               # if target = cursor
 ├── .windsurf/workflows/            # if target = windsurf
+├── .gpt/commands/                  # if target = gpt
 └── AGENTS.md                       # if target = generic
 ```
 

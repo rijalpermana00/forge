@@ -24,12 +24,12 @@ program
 program
   .command("init")
   .description("Scaffold specs/ folder and an AI-tool bridge in the current project")
-  .option("-t, --target <target>", "bridge target: claude, cursor, windsurf, or generic", "claude")
+  .option("-t, --target <target>", "bridge target: claude, cursor, windsurf, gpt, or generic", "claude")
   .action((options) => init({ target: options.target }));
 
 program
   .command("bridge <target>")
-  .description("(Re)generate AI-tool bridge commands: claude, cursor, windsurf, or generic")
+  .description("(Re)generate AI-tool bridge commands: claude, cursor, windsurf, gpt, or generic")
   .action((target) => bridge(target));
 
 program

@@ -10,6 +10,7 @@ workflow into whichever AI coding tool you use.
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Workflow](#workflow)
+- [Bootstrapping from a BRD or HTML mockup](#bootstrapping-from-a-brd-or-html-mockup)
 - [Spec index](#spec-index)
 - [AI tool support](#ai-tool-support)
 - [Command reference](#command-reference)
@@ -80,6 +81,40 @@ forge implement btn-fraud-check   # checks tasks.md exists, reports grounding fi
                                    # -> your AI tool then writes the actual code
 ```
 
+## Bootstrapping from a BRD or HTML mockup
+
+`forge smelt` has two input modes. Without `--from`, it prompts you
+interactively for goal, actors, constraints, and out-of-scope items. With
+`--from <file>`, it grounds the brief in a document you already have —
+a BRD, a requirements doc, or an HTML mockup — instead of you retyping it:
+
+```bash
+forge smelt btn-fraud-check --from ./docs/fraud-check-brd.md
+forge smelt checkout-flow --from ./mockups/checkout.html
+```
+
+What happens:
+
+1. `forge` copies the source file byte-for-byte into
+   `specs/<feature>/source-brd.<ext>` (extension preserved — `.md`, `.html`,
+   `.pdf`, `.docx`, …). It never parses or transcodes it.
+2. `brief.md` is stubbed with `[TODO: extract from source-brd.<ext>]` markers
+   instead of the interactive answers.
+3. Open the project in your AI tool and run the matching `smelt` bridge
+   command (`/forge:smelt`, `/forge-smelt`, or the `AGENTS.md` instructions).
+   The AI reads `source-brd.<ext>`, replaces each marker in `brief.md` with
+   the extracted value — citing the section it came from so requirements
+   stay traceable — then drafts `prd.md` from the filled-in brief.
+
+For an HTML mockup specifically, the AI extracts requirements from the
+markup and layout itself (visible fields, actions, states, copy) rather than
+prose — treat it the same as any other source document. If your tool can't
+open the source format directly (e.g. `.docx`), it will ask you to export it
+to Markdown or PDF first rather than guessing at the content.
+
+Nothing is invented: if the source document doesn't cover something `prd.md`
+needs, the AI asks rather than filling it in from assumption.
+
 ## Spec index
 
 `forge init` creates `specs/INDEX.md` — a single manifest tracking every
@@ -140,7 +175,7 @@ the writing.
 | `forge bridge <target>` | — | AI bridge files for `<target>` | Yes — always regenerates |
 | `forge scan [--depth <n>]` | — | `specs/CODEBASE.md` (stack, file stats, existing schema/API files, directory tree) | Yes — refreshes on every run |
 | `forge rules` | — | `specs/RULES.md` (project conventions the AI grounds all drafting in) | Yes — refuses if `RULES.md` exists |
-| `forge smelt <feature>` | — | `brief.md`, `prd.md` (stub), `INDEX.md` entry (`draft`) | Yes — refuses if `brief.md` exists |
+| `forge smelt <feature> [--from <file>]` | — | `brief.md`, `prd.md` (stub), `INDEX.md` entry (`draft`); with `--from`, also `source-brd.<ext>` | Yes — refuses if `brief.md` exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
 | `forge contract <feature>` | `prd.md` | `api-contract.md` (stub) | Yes |
 | `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) | Yes |

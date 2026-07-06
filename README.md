@@ -86,23 +86,23 @@ forge blueprint order-fulfillment --mode fullstack --from ./legacy/OrderService.
 
 `--mode` controls which artifacts get scaffolded: `fe` skips `schema.dbml` (a
 frontend consumes an existing API, it doesn't define the data layer),
-`backend` skips `mockup.html` (no UI to wireframe), `fullstack` scaffolds
-everything (`brief.md`, `prd.md`, `schema.dbml`, `api-contract.md`,
-`mockup.html`, `tasks.md`, `testcases.md`). The mode is recorded in
-`specs/INDEX.md`'s `Mode` column the first time a feature is blueprinted, and
-every later run for that feature reuses the recorded mode regardless of
-`--mode` (edit the column, or the individual commands below, to change a
-feature's mode after the fact). `specs/RULES.md` is scaffolded too if it
-doesn't exist yet. Files that already exist are left untouched, so
-re-running `blueprint` after editing one stub by hand won't clobber it.
+`backend` and `fullstack` include it. All three modes scaffold `brief.md`,
+`prd.md`, `api-contract.md`, `tasks.md`, `testcases.md` (plus `schema.dbml`
+for `backend`/`fullstack`). The mode is recorded in `specs/INDEX.md`'s `Mode`
+column the first time a feature is blueprinted, and every later run for that
+feature reuses the recorded mode regardless of `--mode` (edit the column, or
+the individual commands below, to change a feature's mode after the fact).
+`specs/RULES.md` is scaffolded too if it doesn't exist yet. Files that
+already exist are left untouched, so re-running `blueprint` after editing
+one stub by hand won't clobber it.
 
-`mockup.html` doesn't have to be the generated wireframe — drop in a
-designer's export instead (`mockup.png`, `mockup.pdf`, `mockup.jpg`, ...) and
-`blueprint`/`forge mockup` leave it alone rather than overwriting it, and
-`forge verify` recognizes it as satisfying the mockup artifact. It's also the
-one artifact that's advisory only: an unfinished or missing mockup never
-blocks a feature from reaching `active` status (see
-[Spec index](#spec-index)).
+**`mockup.html` is never auto-scaffolded by `blueprint`, in any mode.** It's
+on-demand only — run `forge mockup <feature>` for a wireframe stub, or drop
+a designer's export straight into the feature folder as `mockup.<ext>`
+(`mockup.png`, `mockup.pdf`, `mockup.jpg`, ...). Either way, `forge verify`
+recognizes whatever it finds as satisfying the mockup artifact, and it's the
+one artifact that's advisory only: missing or unfinished, it never blocks a
+feature from reaching `active` status (see [Spec index](#spec-index)).
 
 If a feature also needs an individual stub regenerated (e.g. you deleted one
 by hand), the single-artifact commands below still work standalone —
@@ -224,7 +224,7 @@ the writing.
 | `forge bridge <target>` | — | AI bridge files for `<target>` | Yes — always regenerates |
 | `forge scan [--depth <n>]` | — | `specs/CODEBASE.md` (stack, file stats, existing schema/API files, directory tree) | Yes — refreshes on every run |
 | `forge rules` | — | `specs/RULES.md` (project conventions the AI grounds all drafting in) | Yes — refuses if `RULES.md` exists |
-| `forge blueprint [feature] [--mode fe\|backend\|fullstack] [--from <file>...]` | — | With a feature name: every stub the mode calls for (`brief.md`, `prd.md`, `schema.dbml`, `api-contract.md`, `mockup.html`, `tasks.md`, `testcases.md`), `specs/RULES.md`, `INDEX.md` entry (`draft`, records `Mode`); with `--from`, also `source-<filename>` per file. Without a feature name: backfills missing stubs for every `INDEX.md`-registered feature using its own recorded `Mode` | Yes — skips any file that already exists |
+| `forge blueprint [feature] [--mode fe\|backend\|fullstack] [--from <file>...]` | — | With a feature name: every stub the mode calls for (`brief.md`, `prd.md`, `api-contract.md`, `tasks.md`, `testcases.md`, plus `schema.dbml` for `backend`/`fullstack` — never `mockup.html`, see below), `specs/RULES.md`, `INDEX.md` entry (`draft`, records `Mode`); with `--from`, also `source-<filename>` per file. Without a feature name: backfills missing stubs for every `INDEX.md`-registered feature using its own recorded `Mode` | Yes — skips any file that already exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
 | `forge contract <feature>` | `prd.md` | `api-contract.md` (stub) | Yes |
 | `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) — skipped if a `mockup.*` file already exists | Yes |

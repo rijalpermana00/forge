@@ -55,21 +55,25 @@ export const COMMAND_SPECS: CommandSpec[] = [
     name: "blueprint",
     argumentHint: "[feature-name] --mode <fe|backend|fullstack> [--from <file>...]",
     description:
-      "Generate the full spec set (brief, prd, schema, contract, mockup, tasks, testcases, rules) for a mode; " +
+      "Generate the full spec set (brief, prd, schema, contract, tasks, testcases, rules) for a mode; " +
       "omit the feature name to backfill every registered feature",
     requiresPrd: false,
     readOnly: false,
     instructions:
       GROUND_IN_RULES +
       "With a feature name, this command creates or backfills that one feature's spec " +
-      "set, scoped to --mode: fe scaffolds brief, prd, mockup, api-contract, tasks, " +
-      "testcases (no schema — a frontend consumes an existing API, it doesn't define " +
-      "the data layer); backend scaffolds brief, prd, schema, api-contract, tasks, " +
-      "testcases (no mockup — there's no UI to wireframe); fullstack scaffolds all of " +
-      "them, schema and mockup included. The mode is recorded in specs/INDEX.md the " +
-      "first time a feature is blueprinted, and reused on every later run for that " +
-      "feature regardless of --mode. It also scaffolds specs/RULES.md if that doesn't " +
-      "exist yet, and skips any file that's already present instead of overwriting it.\n\n" +
+      "set, scoped to --mode: fe scaffolds brief, prd, api-contract, tasks, testcases " +
+      "(no schema — a frontend consumes an existing API, it doesn't define the data " +
+      "layer); backend scaffolds brief, prd, schema, api-contract, tasks, testcases; " +
+      "fullstack scaffolds all of them, schema included. mockup.html is never " +
+      "auto-scaffolded by this command in any mode — run `forge mockup <feature>` " +
+      "on demand for a wireframe stub, or drop a design export straight into the " +
+      "feature folder as mockup.<ext> (mockup.png, mockup.pdf, ...); either satisfies " +
+      "the mockup artifact for `forge verify`, and it's advisory only — never blocks a " +
+      "feature from going active. The mode is recorded in specs/INDEX.md the first time " +
+      "a feature is blueprinted, and reused on every later run for that feature " +
+      "regardless of --mode. It also scaffolds specs/RULES.md if that doesn't exist yet, " +
+      "and skips any file that's already present instead of overwriting it.\n\n" +
       "For a brand-new feature (no brief.md yet), it has two input modes: with --from " +
       "<file>... (repeatable), it stages each file verbatim into the feature folder as " +
       "source-<original-filename> and leaves '[TODO: extract from ...]' markers in " +
@@ -85,10 +89,10 @@ export const COMMAND_SPECS: CommandSpec[] = [
       "Whichever path ran, read every grounding file available (staged source files, " +
       "{{brief}}, {{prd}}, specs/RULES.md) and fill each scaffolded stub in dependency " +
       "order — brief, then prd, then schema (if scaffolded), then api-contract, then " +
-      "mockup (if scaffolded), then tasks, then testcases — so later files can reference " +
-      "entities and endpoints defined earlier. Use the same fixed formats the individual " +
-      "commands use: the Title/endpoint/Request/Response/Note block per endpoint in " +
-      "api-contract.md, and the No/Test Scenario/Test Case/Test Type/Expected Result/" +
+      "tasks, then testcases — so later files can reference entities and endpoints " +
+      "defined earlier. Use the same fixed formats the individual commands use: the " +
+      "Title/endpoint/Request/Response/Note block per endpoint in api-contract.md, and " +
+      "the No/Test Scenario/Test Case/Test Type/Expected Result/" +
       "Actual Result/Status/Remark table in testcases.md (Test Type must be exactly " +
       "**Positive** or **Negative**, Actual Result and Status stay `-`). Do not invent " +
       "scope, entities, or endpoints that aren't traceable to the grounding material — " +

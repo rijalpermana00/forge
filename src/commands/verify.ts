@@ -20,13 +20,14 @@ export function verify(feature: string): void {
 
   const entry = readIndex(cwd).find((e) => e.feature === feature);
   // Only check the artifacts the feature's recorded mode actually calls for —
-  // schema.dbml is never scaffolded for "fe", mockup.html never for "backend",
-  // so checking the full fixed list would report them MISSING forever. Fall
-  // back to the full list for features with no recorded mode (created before
-  // `forge blueprint` tracked one, or not registered at all).
+  // schema.dbml is never scaffolded for "fe", for instance — so checking the
+  // full fixed list would report it MISSING forever. Fall back to the full
+  // list for features with no recorded mode (created before `forge
+  // blueprint` tracked one, or not registered at all). mockup is checked
+  // regardless of mode — it's never mode-gated, only optional (see below).
   const mode = entry && isValidMode(entry.mode) ? entry.mode : undefined;
-  const applicable = mode ? MODE_ARTIFACTS[mode] : ALL_KEYS;
-  const skipped = ALL_KEYS.filter((key) => !applicable.includes(key));
+  const applicable = mode ? ([...MODE_ARTIFACTS[mode], "mockup"] as const) : ALL_KEYS;
+  const skipped = ALL_KEYS.filter((key) => key !== "mockup" && !applicable.includes(key));
 
   console.log(`Verifying spec set for "${feature}"${mode ? ` (mode: ${mode})` : ""}\n`);
 

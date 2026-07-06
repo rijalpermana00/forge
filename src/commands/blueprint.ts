@@ -6,7 +6,6 @@ import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/
 import { upsertIndexEntry, readIndex } from "../lib/index-manifest.js";
 import { SPEC_FILES, type SpecKey } from "../lib/spec-files.js";
 import { MODE_ARTIFACTS, isValidMode, type BlueprintMode } from "../lib/modes.js";
-import { findMockupFile } from "../lib/mockup.js";
 
 export type { BlueprintMode };
 
@@ -128,6 +127,13 @@ async function blueprintOne(feature: string, opts: BlueprintOptions, cwd: string
   });
   console.log(`Registered "${feature}" in specs/INDEX.md`);
 
+  if (mode !== "backend") {
+    console.log(
+      `Note: mockup.html isn't auto-scaffolded — run "forge mockup ${feature}" for a ` +
+        `wireframe stub, or drop a design export in as specs/${feature}/mockup.<ext>.`
+    );
+  }
+
   console.log(
     `\nNext: open this project in your AI tool and ask it to draft every scaffolded file, ` +
       `grounded in the staged source material — use /forge:blueprint, /forge-blueprint, or ` +
@@ -143,17 +149,7 @@ function scaffoldArtifacts(feature: string, mode: BlueprintMode, cwd: string): v
   for (const key of artifacts) {
     const file = SPEC_FILES[key];
     const outPath = join(dir, file);
-
-    // A dropped-in design export (mockup.png, mockup.pdf, ...) satisfies the
-    // mockup artifact just as well as the generated mockup.html — don't
-    // clobber it with the HTML stub.
-    if (key === "mockup") {
-      const existingMockup = findMockupFile(dir);
-      if (existingMockup) {
-        console.log(`${join(dir, existingMockup)} already exists — skipping.`);
-        continue;
-      }
-    } else if (fileExists(outPath)) {
+    if (fileExists(outPath)) {
       console.log(`${outPath} already exists — skipping.`);
       continue;
     }
@@ -164,8 +160,11 @@ function scaffoldArtifacts(feature: string, mode: BlueprintMode, cwd: string): v
     console.log(`Wrote ${outPath} (stub)`);
   }
 
+  // "mockup" is never part of MODE_ARTIFACTS — it's on-demand only (`forge
+  // mockup <feature>`, or drop in a design export as mockup.*) — so it's
+  // reported separately from genuine mode-based skips (e.g. schema for "fe").
   const skipped = (Object.keys(SPEC_FILES) as SpecKey[]).filter(
-    (key) => key !== "brief" && !artifacts.includes(key)
+    (key) => key !== "brief" && key !== "mockup" && !artifacts.includes(key)
   );
   if (skipped.length > 0) {
     console.log(`Skipped for mode "${mode}": ${skipped.map((key) => SPEC_FILES[key]).join(", ")}.`);

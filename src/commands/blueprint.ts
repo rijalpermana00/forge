@@ -6,6 +6,7 @@ import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/
 import { upsertIndexEntry, readIndex } from "../lib/index-manifest.js";
 import { SPEC_FILES, type SpecKey } from "../lib/spec-files.js";
 import { MODE_ARTIFACTS, isValidMode, type BlueprintMode } from "../lib/modes.js";
+import { findMockupFile } from "../lib/mockup.js";
 
 export type { BlueprintMode };
 
@@ -142,10 +143,21 @@ function scaffoldArtifacts(feature: string, mode: BlueprintMode, cwd: string): v
   for (const key of artifacts) {
     const file = SPEC_FILES[key];
     const outPath = join(dir, file);
-    if (fileExists(outPath)) {
+
+    // A dropped-in design export (mockup.png, mockup.pdf, ...) satisfies the
+    // mockup artifact just as well as the generated mockup.html — don't
+    // clobber it with the HTML stub.
+    if (key === "mockup") {
+      const existingMockup = findMockupFile(dir);
+      if (existingMockup) {
+        console.log(`${join(dir, existingMockup)} already exists — skipping.`);
+        continue;
+      }
+    } else if (fileExists(outPath)) {
       console.log(`${outPath} already exists — skipping.`);
       continue;
     }
+
     const raw = readTemplate(join(templatesDir, file));
     const rendered = renderTemplate(raw, { feature });
     writeIfAbsent(outPath, rendered);

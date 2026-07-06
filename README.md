@@ -96,6 +96,14 @@ feature's mode after the fact). `specs/RULES.md` is scaffolded too if it
 doesn't exist yet. Files that already exist are left untouched, so
 re-running `blueprint` after editing one stub by hand won't clobber it.
 
+`mockup.html` doesn't have to be the generated wireframe — drop in a
+designer's export instead (`mockup.png`, `mockup.pdf`, `mockup.jpg`, ...) and
+`blueprint`/`forge mockup` leave it alone rather than overwriting it, and
+`forge verify` recognizes it as satisfying the mockup artifact. It's also the
+one artifact that's advisory only: an unfinished or missing mockup never
+blocks a feature from reaching `active` status (see
+[Spec index](#spec-index)).
+
 If a feature also needs an individual stub regenerated (e.g. you deleted one
 by hand), the single-artifact commands below still work standalone —
 `forge schema`, `forge contract`, `forge mockup`, `forge tasks`,
@@ -219,7 +227,7 @@ the writing.
 | `forge blueprint [feature] [--mode fe\|backend\|fullstack] [--from <file>...]` | — | With a feature name: every stub the mode calls for (`brief.md`, `prd.md`, `schema.dbml`, `api-contract.md`, `mockup.html`, `tasks.md`, `testcases.md`), `specs/RULES.md`, `INDEX.md` entry (`draft`, records `Mode`); with `--from`, also `source-<filename>` per file. Without a feature name: backfills missing stubs for every `INDEX.md`-registered feature using its own recorded `Mode` | Yes — skips any file that already exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
 | `forge contract <feature>` | `prd.md` | `api-contract.md` (stub) | Yes |
-| `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) | Yes |
+| `forge mockup <feature>` | `prd.md` | `mockup.html` (stub) — skipped if a `mockup.*` file already exists | Yes |
 | `forge tasks <feature>` | `prd.md` | `tasks.md` (stub) | Yes |
 | `forge testcase <feature>` | `prd.md` | `testcases.md` (stub) | Yes |
 | `forge implement <feature>` | `tasks.md` | Console report of which grounding files exist; no spec file written | N/A — writes application code, not specs |
@@ -239,6 +247,7 @@ your-project/
 │       ├── schema.dbml          # entities derived from prd.md
 │       ├── api-contract.md       # Title / endpoint / Request / Response / Note format
 │       ├── mockup.html            # throwaway wireframe (plain HTML/CSS, no framework)
+│       │                          #   — or mockup.png/.pdf/etc. if you drop in a design export
 │       ├── tasks.md               # WBS, sequenced data -> logic -> UI
 │       └── testcases.md            # No/Scenario/Case/Type/Expected/Actual/Status/Remark table
 ├── .claude/commands/forge/         # if target = claude

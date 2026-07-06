@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { featureDir, templatesDir } from "../lib/paths.js";
 import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/template.js";
 import { SPEC_FILES } from "../lib/spec-files.js";
+import { findMockupFile } from "../lib/mockup.js";
 
 interface ScaffoldOptions {
   file: string; // spec artifact name, used as both template and output, e.g. "schema.dbml"
@@ -23,7 +24,15 @@ export function makeScaffoldCommand({ file, label }: ScaffoldOptions) {
       return;
     }
 
-    if (fileExists(outPath)) {
+    // A dropped-in design export (mockup.png, mockup.pdf, ...) satisfies the
+    // mockup artifact just as well as the generated mockup.html.
+    if (file === SPEC_FILES.mockup) {
+      const existingMockup = findMockupFile(dir);
+      if (existingMockup) {
+        console.log(`${join(dir, existingMockup)} already exists — skipping (edit or delete it to regenerate).`);
+        return;
+      }
+    } else if (fileExists(outPath)) {
       console.log(`${outPath} already exists — skipping (edit it directly, or delete to regenerate).`);
       return;
     }

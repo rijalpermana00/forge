@@ -20,3 +20,10 @@ export type SpecKey = keyof typeof SPEC_FILES;
 
 /** All spec file names, in declaration order. */
 export const SPEC_FILE_NAMES: string[] = Object.values(SPEC_FILES);
+
+/**
+ * Artifacts that get scaffolded per mode but are advisory only — a throwaway
+ * wireframe, not a contract. `forge verify` never blocks a feature from
+ * going "active" because one of these is missing or still has [TODO]s.
+ */
+export const OPTIONAL_SPEC_KEYS: SpecKey[] = ["mockup"];

@@ -5,23 +5,9 @@ import { featureDir, specsDir, templatesDir } from "../lib/paths.js";
 import { readTemplate, renderTemplate, writeIfAbsent, fileExists } from "../lib/template.js";
 import { upsertIndexEntry, readIndex } from "../lib/index-manifest.js";
 import { SPEC_FILES, type SpecKey } from "../lib/spec-files.js";
+import { MODE_ARTIFACTS, isValidMode, type BlueprintMode } from "../lib/modes.js";
 
-export type BlueprintMode = "fe" | "backend" | "fullstack";
-
-/**
- * Which spec artifacts apply to each mode. `brief`/`prd` and `tasks`/`testcases`
- * are universal — `schema` only makes sense where a data layer is being built,
- * `mockup` only where a UI is being built.
- */
-const MODE_ARTIFACTS: Record<BlueprintMode, SpecKey[]> = {
-  fe: ["brief", "prd", "mockup", "contract", "tasks", "testcases"],
-  backend: ["brief", "prd", "schema", "contract", "tasks", "testcases"],
-  fullstack: ["brief", "prd", "schema", "contract", "mockup", "tasks", "testcases"],
-};
-
-function isValidMode(mode: string): mode is BlueprintMode {
-  return mode === "fe" || mode === "backend" || mode === "fullstack";
-}
+export type { BlueprintMode };
 
 export interface BlueprintOptions {
   mode: string;

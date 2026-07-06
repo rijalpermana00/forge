@@ -223,7 +223,7 @@ the writing.
 | `forge tasks <feature>` | `prd.md` | `tasks.md` (stub) | Yes |
 | `forge testcase <feature>` | `prd.md` | `testcases.md` (stub) | Yes |
 | `forge implement <feature>` | `tasks.md` | Console report of which grounding files exist; no spec file written | N/A — writes application code, not specs |
-| `forge verify <feature>` | — | Console report, `INDEX.md` status → `active` if complete | N/A (read-only on spec files) |
+| `forge verify <feature>` | — | Console report (mode-aware — only checks the artifacts the feature's recorded `Mode` calls for; others show `[N/A]`), `INDEX.md` status → `active` if complete | N/A (read-only on spec files) |
 
 ## Output structure
 

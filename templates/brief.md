@@ -17,5 +17,5 @@ Captured on: {{date}}
 ---
 Next step: open this file in Claude Code / Claude Desktop and ask it to draft
 `prd.md` in this same folder using this brief as grounding context. Do not let
-the AI invent scope not covered here — send it back to `forge smelt {{feature}}`
+the AI invent scope not covered here — send it back to `forge blueprint {{feature}}`
 to re-run the Q&A if something's missing.

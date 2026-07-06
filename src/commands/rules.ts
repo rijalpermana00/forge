@@ -17,7 +17,7 @@ export function rules(): void {
   console.log(`Wrote ${outPath}`);
   console.log(`  Fill in the [TODO] sections with your project's conventions.`);
   console.log(
-    `\nEvery forge drafting command (smelt, schema, contract, tasks, testcase) ` +
+    `\nEvery forge drafting command (blueprint, schema, contract, tasks, testcase) ` +
       `will ground the AI in these rules.`
   );
 }

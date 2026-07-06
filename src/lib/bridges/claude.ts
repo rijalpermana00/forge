@@ -9,7 +9,11 @@ export function renderClaude(spec: CommandSpec): string {
       ? `Bash(forge ${spec.name}:*), Read, Write, Edit`
       : `Bash(forge ${spec.name}:*), Read, Edit`;
 
-  const body = substitutePaths(spec.instructions, (file) => `specs/$ARGUMENTS/${file}`);
+  // Use $1 (first positional arg), not $ARGUMENTS, for path substitution —
+  // $ARGUMENTS is the whole trailing string (e.g. "my-feature --mode fe" for
+  // blueprint), so it's only safe to embed in the Bash invocation line below,
+  // not inline as a directory name.
+  const body = substitutePaths(spec.instructions, (file) => `specs/$1/${file}`);
 
   return `---
 allowed-tools: ${allowedTools}

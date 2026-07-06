@@ -52,25 +52,47 @@ export const COMMAND_SPECS: CommandSpec[] = [
       "filled, every other forge drafting command must obey these rules.",
   },
   {
-    name: "smelt",
-    argumentHint: "[feature-name]",
-    description: "Extract raw requirements into a grounding brief, then draft the PRD",
+    name: "blueprint",
+    argumentHint: "[feature-name] --mode <fe|backend|fullstack> [--from <file>...]",
+    description:
+      "Generate the full spec set (brief, prd, schema, contract, mockup, tasks, testcases, rules) for a mode; " +
+      "omit the feature name to backfill every registered feature",
     requiresPrd: false,
     readOnly: false,
     instructions:
       GROUND_IN_RULES +
-      "This command has two input modes. Default: it prompts for goal, actors, " +
-      "constraints, and out-of-scope items in the terminal. With --from <file>: it " +
-      "stages an existing BRD/requirements document verbatim in the feature folder as " +
-      "source-brd.<ext> (extension preserved — .md, .pdf, .docx, …) and leaves " +
-      "'[TODO: extract from source-brd.<ext>]' markers in {{brief}}. If a source-brd.* " +
-      "file exists, read it (if your tool can't open that format — e.g. .docx — say so " +
-      "and ask the user to export it to Markdown or PDF) and replace each marker in " +
-      "{{brief}} with the value extracted from the document, citing the BRD section it " +
-      "came from so every requirement stays traceable. Then read {{brief}} and draft " +
-      "{{prd}} following the structure already stubbed there. Do not invent scope, " +
-      "actors, or rules that aren't grounded in the brief or the BRD — if something's " +
-      "missing, ask what to clarify instead of guessing.",
+      "With a feature name, this command creates or backfills that one feature's spec " +
+      "set, scoped to --mode: fe scaffolds brief, prd, mockup, api-contract, tasks, " +
+      "testcases (no schema — a frontend consumes an existing API, it doesn't define " +
+      "the data layer); backend scaffolds brief, prd, schema, api-contract, tasks, " +
+      "testcases (no mockup — there's no UI to wireframe); fullstack scaffolds all of " +
+      "them, schema and mockup included. The mode is recorded in specs/INDEX.md the " +
+      "first time a feature is blueprinted, and reused on every later run for that " +
+      "feature regardless of --mode. It also scaffolds specs/RULES.md if that doesn't " +
+      "exist yet, and skips any file that's already present instead of overwriting it.\n\n" +
+      "For a brand-new feature (no brief.md yet), it has two input modes: with --from " +
+      "<file>... (repeatable), it stages each file verbatim into the feature folder as " +
+      "source-<original-filename> and leaves '[TODO: extract from ...]' markers in " +
+      "{{brief}} for you to fill from those files, citing where each value came from so " +
+      "requirements stay traceable; without --from, it prompts interactively in the " +
+      "terminal for goal, actors, constraints, and out-of-scope items instead — let that " +
+      "prompt run and relay the user's answers rather than answering on their behalf.\n\n" +
+      "Without a feature name, this backfills every feature already registered in " +
+      "specs/INDEX.md using each row's own recorded Mode — only missing files are " +
+      "written, nothing already drafted is touched. Use this after adding new project " +
+      "conventions, or after new features were registered by someone else, to catch " +
+      "every feature's spec set up.\n\n" +
+      "Whichever path ran, read every grounding file available (staged source files, " +
+      "{{brief}}, {{prd}}, specs/RULES.md) and fill each scaffolded stub in dependency " +
+      "order — brief, then prd, then schema (if scaffolded), then api-contract, then " +
+      "mockup (if scaffolded), then tasks, then testcases — so later files can reference " +
+      "entities and endpoints defined earlier. Use the same fixed formats the individual " +
+      "commands use: the Title/endpoint/Request/Response/Note block per endpoint in " +
+      "api-contract.md, and the No/Test Scenario/Test Case/Test Type/Expected Result/" +
+      "Actual Result/Status/Remark table in testcases.md (Test Type must be exactly " +
+      "**Positive** or **Negative**, Actual Result and Status stay `-`). Do not invent " +
+      "scope, entities, or endpoints that aren't traceable to the grounding material — " +
+      "if something's missing, ask instead of guessing.",
   },
   {
     name: "schema",

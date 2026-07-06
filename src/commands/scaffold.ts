@@ -16,7 +16,7 @@ export function makeScaffoldCommand({ file, label }: ScaffoldOptions) {
 
     if (!fileExists(prdPath)) {
       console.error(
-        `No prd.md found for "${feature}". Run "forge smelt ${feature}" first ` +
+        `No prd.md found for "${feature}". Run "forge blueprint ${feature} --mode <fe|backend|fullstack>" first ` +
           `so the ${label} is grounded in an actual spec, not invented from scratch.`
       );
       process.exitCode = 1;

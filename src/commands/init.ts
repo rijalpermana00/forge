@@ -15,5 +15,5 @@ export function init(options: { target?: string } = {}): void {
 
   bridge(target, cwd);
 
-  console.log(`\nNext: forge smelt <feature-name>`);
+  console.log(`\nNext: forge blueprint <feature-name> --mode <fe|backend|fullstack>`);
 }

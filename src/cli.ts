@@ -2,7 +2,7 @@
 import { createRequire } from "node:module";
 import { Command } from "commander";
 import { init } from "./commands/init.js";
-import { smelt } from "./commands/smelt.js";
+import { blueprint } from "./commands/blueprint.js";
 import { makeScaffoldCommand } from "./commands/scaffold.js";
 import { implement } from "./commands/implement.js";
 import { verify } from "./commands/verify.js";
@@ -44,13 +44,19 @@ program
   .action(() => rules());
 
 program
-  .command("smelt <feature>")
-  .description("Extract raw requirements into a grounding brief and stub the PRD")
+  .command("blueprint [feature]")
+  .description(
+    "Generate the full spec set (brief, prd, schema, contract, mockup, tasks, testcases, rules) for a mode; " +
+      "omit the feature name to backfill every registered feature using its own recorded mode"
+  )
+  .option("-m, --mode <mode>", "target mode for a new feature: fe, backend, or fullstack", "fullstack")
   .option(
     "-f, --from <file>",
-    "extract from an existing BRD/requirements document instead of interactive Q&A"
+    "existing file to ground generation in (repeatable — code, BRD, mockup, ...); requires a feature name",
+    (file, previous: string[]) => [...previous, file],
+    [] as string[]
   )
-  .action((feature, options) => smelt(feature, { from: options.from }));
+  .action((feature, options) => blueprint(feature, { mode: options.mode, from: options.from }));
 
 program
   .command("schema <feature>")

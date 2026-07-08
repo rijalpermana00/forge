@@ -223,6 +223,7 @@ the writing.
 | `forge init [--target <t>]` | — | `specs/`, `specs/INDEX.md`, AI bridge files | Yes — bridge files regenerate freely |
 | `forge bridge <target>` | — | AI bridge files for `<target>` | Yes — always regenerates |
 | `forge scan [--depth <n>]` | — | `specs/CODEBASE.md` (stack, file stats, existing schema/API files, directory tree) | Yes — refreshes on every run |
+| `forge scan --contracts` | — | `specs/CONTRACTS.md` (every API call the code makes — method, path, response type — plus exported interfaces, type aliases, enums, and Zod schemas). Run in a frontend repo to capture the contract surface a backend must satisfy, then feed it to `blueprint --mode backend --from specs/CONTRACTS.md` | Yes — refreshes on every run |
 | `forge rules` | — | `specs/RULES.md` (project conventions the AI grounds all drafting in) | Yes — refuses if `RULES.md` exists |
 | `forge blueprint [feature] [--mode fe\|backend\|fullstack] [--from <file>...]` | — | With a feature name: every stub the mode calls for (`brief.md`, `prd.md`, `api-contract.md`, `tasks.md`, `testcases.md`, plus `schema.dbml` for `backend`/`fullstack` — never `mockup.html`, see below), `specs/RULES.md`, `INDEX.md` entry (`draft`, records `Mode`); with `--from`, also `source-<filename>` per file. Without a feature name: backfills missing stubs for every `INDEX.md`-registered feature using its own recorded `Mode` | Yes — skips any file that already exists |
 | `forge schema <feature>` | `prd.md` | `schema.dbml` (stub) | Yes |
@@ -240,6 +241,7 @@ your-project/
 ├── specs/
 │   ├── INDEX.md                    # creation order, status, dependencies across all features
 │   ├── CODEBASE.md                 # (optional) forge scan output: existing project inventory
+│   ├── CONTRACTS.md                # (optional) forge scan --contracts output: consumed endpoints + data shapes
 │   ├── RULES.md                    # (optional) forge rules output: project conventions the AI follows
 │   └── <feature-name>/
 │       ├── brief.md           # blueprint Q&A capture

@@ -36,7 +36,11 @@ program
   .command("scan")
   .description("Inventory the existing project structure into specs/CODEBASE.md")
   .option("-d, --depth <n>", "directory-tree depth to include in the report", "2")
-  .action((options) => scan({ depth: Number(options.depth) }));
+  .option(
+    "-c, --contracts",
+    "extract consumed API endpoints and data shapes into specs/CONTRACTS.md (grounding for a backend prompt)"
+  )
+  .action((options) => scan({ depth: Number(options.depth), contracts: options.contracts }));
 
 program
   .command("rules")

@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { featureDir, specsDir } from "../lib/paths.js";
 import { fileExists } from "../lib/template.js";
 import { SPEC_FILES, SPEC_FILE_NAMES } from "../lib/spec-files.js";
+import { findMockupFile } from "../lib/mockup.js";
 
 /**
  * Unlike the scaffold commands, `implement` never writes a spec file — it
@@ -26,6 +27,11 @@ export function implement(feature: string): void {
   console.log(`Implementing: ${feature}\n`);
   console.log(`Grounding files:`);
   for (const file of SPEC_FILE_NAMES) {
+    if (file === SPEC_FILES.mockup) {
+      const found = findMockupFile(dir);
+      console.log(`  ${found ? "[OK] " : "[--] "} specs/${feature}/${found ?? "mockup.*"}`);
+      continue;
+    }
     const path = join(dir, file);
     console.log(`  ${fileExists(path) ? "[OK] " : "[--] "} specs/${feature}/${file}`);
   }
